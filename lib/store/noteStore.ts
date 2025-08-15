@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export const initialDraft: CreateNote = {
-  title: 'Sample Note',
+  title: '',
   content: '',
   tag: 'Todo',
 };
