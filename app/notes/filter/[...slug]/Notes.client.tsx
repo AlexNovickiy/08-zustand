@@ -9,12 +9,10 @@ import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import Pagination from '@/components/Pagination/Pagination';
 import NoteList from '@/components/NoteList/NoteList';
-import NoteModal from '@/components/Modal/Modal';
 
 import { fetchNotes } from '@/lib/api';
 
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
-import NoteForm from '@/components/NoteForm/NoteForm';
 import type { FetchNotesResponse } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 
@@ -24,7 +22,6 @@ interface NotesClientProps {
 }
 
 export default function NotesClient({ initialData, tag }: NotesClientProps) {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>('');
   const [debouncedSearchValue] = useDebounce(searchValue, 1000);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -48,10 +45,6 @@ export default function NotesClient({ initialData, tag }: NotesClientProps) {
 
   const handleCreateNote = () => {
     router.push('/notes/action/create');
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
   };
 
   return (
@@ -81,11 +74,6 @@ export default function NotesClient({ initialData, tag }: NotesClientProps) {
             </div>
           )}
         </>
-      )}
-      {isModalOpen && (
-        <NoteModal onClose={handleCloseModal}>
-          <NoteForm />
-        </NoteModal>
       )}
     </div>
   );
