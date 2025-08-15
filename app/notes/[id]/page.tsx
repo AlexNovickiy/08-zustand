@@ -10,6 +10,28 @@ type NoteDetailsProps = {
   params: Promise<{ id: string }>;
 };
 
+export async function generateMetadata({ params }: NoteDetailsProps) {
+  const { id } = await params;
+  const note = await fetchNoteById(id);
+  return {
+    title: `Note - ${note.title}`,
+    description: `Browse note tagged with ${note.tag}`,
+    openGraph: {
+      title: `Notes - ${note.title}`,
+      description: `Browse note tagged with ${note.tag}`,
+      url: `https://notehub.com/notes/${id}`,
+      images: [
+        {
+          url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'NoteHub - A platform for note-taking and organization',
+        },
+      ],
+    },
+  };
+}
+
 export default async function NoteDetails({ params }: NoteDetailsProps) {
   const { id } = await params;
   const queryClient = new QueryClient();

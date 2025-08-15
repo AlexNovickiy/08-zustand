@@ -16,6 +16,7 @@ import { fetchNotes } from '@/lib/api';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import NoteForm from '@/components/NoteForm/NoteForm';
 import type { FetchNotesResponse } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 
 interface NotesClientProps {
   initialData: FetchNotesResponse;
@@ -27,6 +28,7 @@ export default function NotesClient({ initialData, tag }: NotesClientProps) {
   const [searchValue, setSearchValue] = useState<string>('');
   const [debouncedSearchValue] = useDebounce(searchValue, 1000);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const router = useRouter();
 
   const { data, isFetching, isError, isSuccess } = useQuery({
     queryKey: ['notes', debouncedSearchValue, currentPage, tag],
@@ -44,8 +46,8 @@ export default function NotesClient({ initialData, tag }: NotesClientProps) {
     setCurrentPage(1);
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+  const handleCreateNote = () => {
+    router.push('/notes/action/create');
   };
 
   const handleCloseModal = () => {
@@ -63,7 +65,7 @@ export default function NotesClient({ initialData, tag }: NotesClientProps) {
             onPageChange={setCurrentPage}
           />
         )}
-        <button className={css.button} onClick={handleOpenModal}>
+        <button className={css.button} onClick={handleCreateNote}>
           Create Note +
         </button>
       </div>
@@ -82,7 +84,7 @@ export default function NotesClient({ initialData, tag }: NotesClientProps) {
       )}
       {isModalOpen && (
         <NoteModal onClose={handleCloseModal}>
-          <NoteForm onClose={handleCloseModal} />
+          <NoteForm />
         </NoteModal>
       )}
     </div>

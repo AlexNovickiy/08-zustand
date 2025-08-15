@@ -5,6 +5,28 @@ type NotesPageProps = {
   params: Promise<{ slug: string[] }>;
 };
 
+export async function generateMetadata({ params }: NotesPageProps) {
+  const { slug } = await params;
+  const tag = slug[0] === 'All' ? undefined : slug[0];
+  return {
+    title: `Notes - ${tag || 'All'}`,
+    description: `Browse notes${tag ? ` tagged with "${tag}"` : ''}.`,
+    openGraph: {
+      title: `Notes - ${tag || 'All'}`,
+      description: `Browse notes${tag ? ` tagged with "${tag}"` : ''}.`,
+      url: `https://notehub.com/notes/${slug.join('/')}`,
+      images: [
+        {
+          url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'NoteHub - A platform for note-taking and organization',
+        },
+      ],
+    },
+  };
+}
+
 export default async function NotesPage({ params }: NotesPageProps) {
   const { slug } = await params;
   const tag = slug[0] === 'All' ? undefined : slug[0];
